@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Haptic Watch Counter</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Roboto', sans-serif;
+            overflow: hidden;
+            touch-action: manipulation; /* Prevents double-tap zoom delay */
+        }
+
+
+        .watch-face {
+            width: 100vw;
+            height: 100vw;
+            max-width: 384px;
+            max-height: 384px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            padding: 15% 0;
+            box-sizing: border-box;
+        }
+
+
+        #count {
+            font-size: 6rem;
+            font-weight: 500;
+            margin: 0;
+            line-height: 1;
+            transition: transform 0.1s ease; /* Slight "pop" effect */
+        }
+
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 80%;
+        }
+
+
+        button {
+            border: none;
+            border-radius: 50px;
+            padding: 14px 0;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+
+        .btn-plus { background-color: #30d158; color: black; }
+        .btn-reset { background-color: #222; color: #ff453a; font-size: 0.8rem; padding: 10px 0; }
+        
+        button:active { opacity: 0.7; transform: scale(0.95); }
+    </style>
+</head>
+<body>
+
+
+    <div class="watch-face">
+        <div id="count">0</div>
+
+
+        <div class="controls">
+            <button class="btn-plus" onclick="increment()">INCREASE</button>
+            <button class="btn-reset" onclick="reset()">RESET</button>
+        </div>
+    </div>
+
+
+    <script>
+        let count = 0;
+        const display = document.getElementById('count');
+
+
+        // Helper function for haptics
+        function vibrate(ms) {
+            if ("vibrate" in navigator) {
+                navigator.vibrate(ms);
+            }
+        }
+
+
+        function increment() {
+            count++;
+            display.innerText = count;
+            
+            // Visual feedback
+            display.style.transform = "scale(1.1)";
+            setTimeout(() => display.style.transform = "scale(1.0)", 100);
+            
+            // Haptic: Short, sharp tap
+            vibrate(15); 
+        }
+
+
+        function reset() {
+            count = 0;
+            display.innerText = count;
+            
+            // Haptic: Stronger pulse to indicate a clear
+            vibrate(60);
+        }
+    </script>
+</body>
+</html>
